@@ -2,18 +2,17 @@ import * as yup from 'yup'
 import onChange from 'on-change'
 import render from './view.js'
 
-const schema = yup.object().shape({
-  inputValue: yup.string()
-    .url('Ссылка должна быть валидным URL')
-    .required()
-    .notOneOf(this.existingUrls, 'RSS уже существует'),
-})
+const createRssSchema = (existingUrls) => yup.string()
+  .url('Ссылка должна быть валидным URL')
+  .required('Не должно быть пустым')
+  .notOneOf(existingUrls, 'RSS уже существует')
 
 const app = () => {
   const initialState = {
     formState: {
       isValid: null,
       errors: {},
+      inputValue: '',
     },
     processState: {
       processStatus: 'filling', // 'sending', 'failed', 'success'
@@ -33,10 +32,8 @@ const app = () => {
     const inputValue = formData.get('url')
 
     const existingUrls = watchedState.ui.posts.map(post => post.url)
-    const validateForm = schema.validate(
-      { inputValue },
-      { context: { existingUrls } },
-    )
+    const schema = createRssSchema(existingUrls)
+    const validateForm = schema.validate(inputValue)
 
     validateForm.then(() => {
       watchedState.formState.isValid = true
