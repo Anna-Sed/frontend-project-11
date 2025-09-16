@@ -8,8 +8,8 @@ yup.setLocale({
     notOneOf: () => ({ key: 'rss_form.error_messages.field_exists' }),
   },
   string: {
-    url: () => ({ key: 'rss_form.error_messages.not_valid'})
-  }
+    url: () => ({ key: 'rss_form.error_messages.not_valid' }),
+  },
 })
 
 const createRssSchema = existingUrls => yup.string().url().required().notOneOf(existingUrls)
@@ -18,8 +18,8 @@ const app = (i18n) => {
   const initialState = {
     formState: {
       isValid: null,
-      errors: {},
-      inputValue: '',
+      errors: {}, // { message }
+      inputValue: '', // ???
     },
     processState: {
       processStatus: 'filling', // 'sending', 'failed', 'success'
@@ -50,9 +50,11 @@ const app = (i18n) => {
       // Далее проверка валидации самого сайта что это rss url
       // От этого зависит статус 'failed', 'success'
     })
-      .catch((error) => {
+      .catch((res) => {
         watchedState.formState.isValid = false
-        watchedState.formState.errors = { message: error.massage }
+        watchedState.processState.processStatus = 'failed'
+        const errorMessage = i18n.t(res.errors.map(error => i18n.t(error.key)))
+        watchedState.formState.errors = { message: errorMessage }
       })
   })
 }
