@@ -14,5 +14,5 @@ export default {
       success_message: 'RSS успешно загружен',
     },
     post_button: 'Просмотр',
-  }
+  },
 }
