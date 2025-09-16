@@ -1,0 +1,18 @@
+export default {
+  translation: {
+    languages: {
+      ru: 'Русский',
+    },
+    rss_form: {
+      error_messages: {
+        not_valid: 'Ссылка должна быть валидным URL',
+        field_requared: 'Не должно быть пустым',
+        field_exists: 'RSS уже существует',
+        network_error: 'Ошибка сети',
+        not_rss: 'Ресурс не содержит валидный RSS',
+      },
+      success_message: 'RSS успешно загружен',
+    },
+    post_button: 'Просмотр',
+  }
+}
