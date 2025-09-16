@@ -2,12 +2,19 @@ import * as yup from 'yup'
 import onChange from 'on-change'
 import render from './view.js'
 
-const createRssSchema = (existingUrls) => yup.string()
-  .url('Ссылка должна быть валидным URL')
-  .required('Не должно быть пустым')
-  .notOneOf(existingUrls, 'RSS уже существует')
+yup.setLocale({
+  mexed: {
+    requared: () => ({ key: 'rss_form.error_messages.field_requared' }),
+    notOneOf: () => ({ key: 'rss_form.error_messages.field_exists' }),
+  },
+  string: {
+    url: () => ({ key: 'rss_form.error_messages.not_valid'})
+  }
+})
 
-const app = () => {
+const createRssSchema = existingUrls => yup.string().url().required().notOneOf(existingUrls)
+
+const app = (i18n) => {
   const initialState = {
     formState: {
       isValid: null,
@@ -20,7 +27,7 @@ const app = () => {
     },
     ui: {
       seenPost: [],
-      posts: [],
+      posts: [], // { id, url }
     },
   }
   const watchedState = onChange(initialState, () => render(watchedState))
