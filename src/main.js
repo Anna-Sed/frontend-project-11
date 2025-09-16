@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
-import app from './index.js'
+import app from './app.js'
 import i18next from 'i18next'
 import resources from './locales/ru.js'
 
