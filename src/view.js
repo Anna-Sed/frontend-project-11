@@ -1,4 +1,4 @@
-const render = (state) => {
+const render = (state, i18n) => {
   const { formState } = state
 
   // const submitButton = document.querySelector('[aria-label="add"]')
@@ -12,7 +12,8 @@ const render = (state) => {
   }
   else {
     rssInput.classList.add('is-invalid')
-    feedbackField.textContent = formState.errors.massage
+    console.log('error in view =' ,formState.errors.message)
+    feedbackField.textContent = formState.errors.message
   }
 }
 

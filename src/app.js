@@ -4,11 +4,11 @@ import render from './view.js'
 
 yup.setLocale({
   mixed: {
-    required: () => ({ key: 'rss_form.error_messages.field_required' }),
-    notOneOf: () => ({ key: 'rss_form.error_messages.field_exists' }),
+    required: () => 'rss_form.error_messages.field_required',
+    notOneOf: () => 'rss_form.error_messages.field_exists',
   },
   string: {
-    url: () => ({ key: 'rss_form.error_messages.not_valid' }),
+    url: () => 'rss_form.error_messages.not_valid',
   },
 })
 
@@ -50,11 +50,13 @@ const app = (i18n) => {
       // Далее проверка валидации самого сайта что это rss url
       // От этого зависит статус 'failed', 'success'
     })
-      .catch((res) => {
+      .catch((error) => {
         watchedState.formState.isValid = false
         watchedState.processState.processStatus = 'failed'
-        const errorMessage = i18n.t(res.errors.map(error => i18n.t(error.key)))
+        const errorMessage = i18n.t(error.message)
+        console.log('error message = ', errorMessage)
         watchedState.formState.errors = { message: errorMessage }
+        console.log('state = ', watchedState)
       })
   })
 }
