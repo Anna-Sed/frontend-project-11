@@ -1,8 +1,5 @@
 export default {
   translation: {
-    languages: {
-      ru: 'Русский',
-    },
     rss_form: {
       error_messages: {
         not_valid: 'Ссылка должна быть валидным URL',
