@@ -4,7 +4,7 @@ import render from './view.js'
 
 yup.setLocale({
   mexed: {
-    requared: () => ({ key: 'rss_form.error_messages.field_requared' }),
+    required: () => ({ key: 'rss_form.error_messages.field_required' }),
     notOneOf: () => ({ key: 'rss_form.error_messages.field_exists' }),
   },
   string: {
