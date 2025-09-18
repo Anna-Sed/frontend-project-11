@@ -2,6 +2,10 @@ import onChange from 'on-change'
 
 const handleProcess = (processState, errors, elements, i18n) => { // передача ошибки именно из processState
   const { rssInput, feedbackField, submitBtn } = elements
+  if (!rssInput || !feedbackField || !submitBtn) {
+    console.error('Отсутствуют элементы формы')
+    return
+  }
   switch (processState) {
     case 'filling':
       break
@@ -46,6 +50,9 @@ const handleIsValid = (isValid, elements, errors) => { // передача ош�
 
 const createFormWatcher = (state, i18n, elements) => {
   const { formState, processState } = state
+  if (!elements.rssInput || !elements.feedbackField || !elements.submitBtn) {
+    throw new Error('Не все элементы формы предоставлены')
+  }
   return onChange(state, (path, value) => {
     switch (path) {
       case 'formState.errors':

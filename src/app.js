@@ -60,7 +60,10 @@ const app = (i18n) => {
       // и мы отправляем запрос на сервер.
       // Далее проверка валидации самого сайта что это rss url
       // От этого зависит статус 'failed', 'success'
-      watchedState.processState.status = 'success'
+      setTimeout(() => {
+        // После успешной обработки
+        watchedState.processState.status = 'success'
+      }, 1000)
     })
       .catch((error) => {
         watchedState.formState.isValid = false
