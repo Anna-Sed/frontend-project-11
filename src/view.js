@@ -43,10 +43,15 @@ const handleIsValid = (isValid, elements, errors) => { // передача ош�
     console.log('text content = ', feedbackField.textContent)
   }
 }
+
 const createFormWatcher = (state, i18n, elements) => {
   const { formState, processState } = state
   return onChange(state, (path, value) => {
     switch (path) {
+      case 'formState.errors':
+        // Проверяем валидность: если message пустое или отсутствует, форма считается валидной
+        handleIsValid(!value.message, elements, value)
+        break
       case 'formState.isValid':
         handleIsValid(value, elements, formState.errors)
         break
