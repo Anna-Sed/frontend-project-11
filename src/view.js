@@ -50,9 +50,15 @@ const handleIsValid = (isValid, elements, errors) => { // передача ош�
 
 const createFormWatcher = (state, i18n, elements) => {
   const { formState, processState } = state
-  if (!elements.rssInput || !elements.feedbackField || !elements.submitBtn) {
-    throw new Error('Не все элементы формы предоставлены')
-  }
+  if (!elements.rssInput) {
+  throw new Error('Не найден input для URL')
+}
+if (!elements.feedbackField) {
+  throw new Error('Не найден элемент обратной связи')
+}
+if (!elements.submitBtn) {
+  throw new Error('Не найдена кнопка отправки')
+}
   return onChange(state, (path, value) => {
     switch (path) {
       case 'formState.errors':

@@ -30,13 +30,13 @@ const app = (i18n) => {
     },
   }
 
-  const submitButton = document.querySelector('[aria-label="add"]')
+  const submitBtn = document.querySelector('[aria-label="add"]')
   const rssInput = document.querySelector('#url-input')
   const feedbackField = document.querySelector('.feedback')
   const form = document.querySelector('.rss-form')
 
   const elements = {
-    submitButton,
+    submitBtn,
     rssInput,
     feedbackField,
     form,
