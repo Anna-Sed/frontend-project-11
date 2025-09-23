@@ -1,8 +1,8 @@
 import onChange from 'on-change'
 
-const handleProcess = (processState, errors, elements, i18n) => { // передача ошибки именно из processState
+const handleProcess = (processStatus, errors, elements, i18n) => { // передача ошибки именно из processState
   const { rssInput, feedbackField, submitBtn } = elements
-  switch (processState) {
+  switch (processStatus) {
     case 'filling':
       break
     case 'failed':
@@ -24,7 +24,7 @@ const handleProcess = (processState, errors, elements, i18n) => { // перед�
       rssInput.disabled = true
       break
     default:
-      throw new Error(`Unexpected process state: ${processState}`)
+      throw new Error(`Unexpected process state: ${processStatus}`)
   }
 }
 
@@ -54,6 +54,10 @@ const createFormWatcher = (state, i18n, elements) => {
         break
       case 'formState.isValid':
         handleIsValid(value, elements, formState.errors)
+        break
+      case ' processState.processErrors':
+        const status = value.length > 0 ? 'failed' : 'success'
+        handleProcess(status, value, elements, i18n)
         break
       case 'processState.status':
         handleProcess(value, processState.processErrors, elements, i18n)

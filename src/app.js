@@ -40,7 +40,7 @@ const app = (i18n) => {
     },
     processState: {
       status: 'filling', // 'sending', 'failed', 'success'
-      processErrors: {},
+      processErrors: '',
     },
     feedsData: {
       posts: [], // { id, linc, title, description, feedId }
@@ -76,7 +76,6 @@ const app = (i18n) => {
     const formData = new FormData(e.target)
     const inputValue = formData.get('url')
 
-    console.log('state,urls = ', watchedFeedsState.urls)
     const existingUrls = watchedFeedsState.urls
     const schema = createRssSchema(existingUrls)
     const validateForm = schema.validate(inputValue)
@@ -101,6 +100,7 @@ const app = (i18n) => {
         watchedFeedsState.urls.unshift(inputValue)
         watchedFeedsState.feeds.unshift(data.feed)
         watchedFeedsState.posts = [data.post, ...watchedFeedsState.posts]
+        watchedFormState.processState.processErrors = ''
       })
       .catch((error) => {
         watchedFormState.processState.status = 'failed'
