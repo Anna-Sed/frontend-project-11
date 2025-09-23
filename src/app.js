@@ -76,7 +76,8 @@ const app = (i18n) => {
     const formData = new FormData(e.target)
     const inputValue = formData.get('url')
 
-    const existingUrls = watchedFormState.ui.posts.map(post => post.url)
+    console.log('state,urls = ', watchedFeedsState.urls)
+    const existingUrls = watchedFeedsState.urls
     const schema = createRssSchema(existingUrls)
     const validateForm = schema.validate(inputValue)
 
