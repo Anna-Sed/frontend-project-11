@@ -25,9 +25,9 @@ const downloadRssFeed = (url, i18n) => axios
   .catch((error) => {
     switch (error.code) {
       case 'ERR_NETWORK':
-        throw new Error(i18n.t('rss_form.network_error'))
+        throw new Error(i18n.t('rss_form.error_messages.network_error'))
       default:
-        throw new Error(i18n.t('rss_form.not_rss'))
+        throw new Error(i18n.t('rss_form.error_messages.not_rss'))
     }
   })
 
@@ -111,7 +111,8 @@ const app = (i18n) => {
         }
         else {
           watchedFormState.processState.status = 'failed'
-          watchedFormState.processState.processErrors = { message: error.message }
+          const message = i18n.t(error.message)
+          watchedFormState.processState.processErrors = { message }
           console.log('processState.processErrors = ', watchedFormState.processState.processErrors)
         }
       })
