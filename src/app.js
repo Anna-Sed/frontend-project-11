@@ -20,7 +20,7 @@ const downloadRssFeed = (url, i18n) => axios
   .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
   .then((response) => {
     console.log('Полный ответ:', JSON.stringify(response.data, null, 2))
-    parseRss(response.data.contents) // отправляем данные на парсинг
+    return parseRss(response.data.contents) // отправляем данные на парсинг
   })
   .catch((error) => {
     switch (error.code) {
@@ -59,6 +59,11 @@ const app = (i18n) => {
   const postsRoot = document.querySelector('.posts')
   const feedsRoot = document.querySelector('.feeds')
 
+  if (!feedsRoot || !postsRoot) {
+    console.error('Не найдены элементы для рендеринга')
+    return
+  }
+
   const elements = {
     submitBtn,
     rssInput,
@@ -96,11 +101,17 @@ const app = (i18n) => {
         // Далее проверка валидации самого сайта что это rss url
       })
       .then((data) => {
-        watchedFormState.processState.status = 'success'
-        watchedFeedsState.urls.unshift(inputValue)
-        watchedFeedsState.feeds.unshift(data.feed)
-        watchedFeedsState.posts = [data.post, ...watchedFeedsState.posts]
-        watchedFormState.processState.processErrors = ''
+        console.log('Полученные данные:', data)
+        if (watchedFeedsState.urls.includes(inputValue)) {
+          throw new Error('Error: url was added')
+        }
+        else {
+          watchedFormState.processState.status = 'success'
+          watchedFeedsState.urls.unshift(inputValue)
+          watchedFeedsState.feeds.unshift(data.feed)
+          watchedFeedsState.posts = [data.post, ...watchedFeedsState.posts]
+          watchedFormState.processState.processErrors = ''
+        }
       })
       .catch((error) => {
         watchedFormState.processState.status = 'failed'

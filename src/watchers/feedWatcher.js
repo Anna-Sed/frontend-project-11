@@ -14,6 +14,7 @@ const createConteiner = (root, title) => {
 }
 
 const renderFeeds = (feeds, feedsRoot) => {
+  console.log('Рендерим фиды:', feeds)
   const conteiner = createConteiner(feedsRoot, 'Фиды')
   const ul = conteiner.querySelector('ul')
 
@@ -59,6 +60,7 @@ const createPostItem = (post, seenPost, i18n) => {
 }
 
 const renderPost = (posts, seenPost, postsRoot, i18n) => {
+  console.log('Рендерим посты:', posts)
   if (posts.length === 0) {
     postsRoot.innerHtml = ''
     return

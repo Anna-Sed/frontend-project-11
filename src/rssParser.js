@@ -23,5 +23,6 @@ export default (xmlContent) => {
       feedId,
     }
   })
+  console.log('Возвращаемые данные:', { feed, posts })
   return { feed, posts }
 }
