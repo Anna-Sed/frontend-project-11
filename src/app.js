@@ -1,6 +1,8 @@
 import * as yup from 'yup'
-import createFormWatcher from './view.js'
-import axios from 'axios';
+import createFormWatcher from './watchers/formWatcher.js'
+import createFeedsWatcher from './watchers/feedWatcher.js'
+import axios from 'axios'
+import parseRss from './rssParser.js'
 
 yup.setLocale({
   mixed: {
@@ -16,8 +18,11 @@ const createRssSchema = existingUrls => yup.string().url().required().notOneOf(e
 
 const downloadRssFeed = (url, i18n) => axios
   .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
-  .then(response => )// отправляем данные на парсинг в отдельную функцию
-  .catch(error => {
+  .then((response) => {
+    console.log('Полный ответ:', JSON.stringify(response.data, null, 2))
+    parseRss(response.data.contents) // отправляем данные на парсинг
+  })
+  .catch((error) => {
     switch (error.code) {
       case 'ERR_NETWORK':
         throw new Error(i18n.t('rss_form.network_error'))
@@ -31,7 +36,7 @@ const app = (i18n) => {
     formState: {
       isValid: null,
       errors: {}, // { message }
-      // inputValue: '', // убрать ???
+      // inputValue: '',
     },
     processState: {
       status: 'filling', // 'sending', 'failed', 'success'
@@ -42,7 +47,7 @@ const app = (i18n) => {
       urls: [],
       feeds: [], // { id, title, discription }
     },
-    ui: {
+    uiState: {
       seenPost: [],
     },
   }
@@ -51,50 +56,55 @@ const app = (i18n) => {
   const rssInput = document.querySelector('#url-input')
   const feedbackField = document.querySelector('.feedback')
   const form = document.querySelector('.rss-form')
+  const postsRoot = document.querySelector('.posts')
+  const feedsRoot = document.querySelector('.feeds')
 
   const elements = {
     submitBtn,
     rssInput,
     feedbackField,
     form,
+    postsRoot,
+    feedsRoot,
   }
 
-  const watchedState = createFormWatcher(state, i18n, elements)
+  const watchedFormState = createFormWatcher(state, i18n, elements)
+  const watchedFeedsState = createFeedsWatcher(state.feedsData, state.uiState, elements, i18n)
 
   form.addEventListener('submit', (e) => {
     e.preventDefault()
     const formData = new FormData(e.target)
     const inputValue = formData.get('url')
 
-    const existingUrls = watchedState.ui.posts.map(post => post.url)
+    const existingUrls = watchedFormState.ui.posts.map(post => post.url)
     const schema = createRssSchema(existingUrls)
     const validateForm = schema.validate(inputValue)
 
     validateForm.catch((error) => {
-        watchedState.formState.isValid = false
-        const errorMessage = i18n.t(error.message)
-        console.log('error message = ', errorMessage)
-        watchedState.formState.errors = { message: errorMessage }
-        console.log('state = ', watchedState)
-      })
+      watchedFormState.formState.isValid = false
+      const errorMessage = i18n.t(error.message)
+      console.log('error message = ', errorMessage)
+      watchedFormState.formState.errors = { message: errorMessage }
+      console.log('state = ', watchedFormState)
+    })
       .then(() => {
-      watchedState.formState.isValid = true
-      watchedState.formState.errors = {}
-      watchedState.processState.status = 'sending'
-      return downloadRssFeed(inputValue, i18n) // отправляем запрос на сервер.
-      
-      // Далее проверка валидации самого сайта что это rss url
-    })
-    .then((data) => {
-      watchedState.processState.status = 'success'
-      watchedState.feedsData.urls.unshift(inputValue) // feedsState
-      watchedState.feedsData.feeds.unshift(data.feed)  // feedsState
-      watchedState.formData.posts = [data.post, ...watchedState.formData.posts] // feedsState
-    })
-    .catch((error) => {
-      watchedState.processState.status = 'failed'
-      watchedState.processState.processErrors = error.message
-    })
+        watchedFormState.formState.isValid = true
+        watchedFormState.formState.errors = {}
+        watchedFormState.processState.status = 'sending'
+        return downloadRssFeed(inputValue, i18n) // отправляем запрос на сервер.
+
+        // Далее проверка валидации самого сайта что это rss url
+      })
+      .then((data) => {
+        watchedFormState.processState.status = 'success'
+        watchedFeedsState.urls.unshift(inputValue)
+        watchedFeedsState.feeds.unshift(data.feed)
+        watchedFeedsState.posts = [data.post, ...watchedFeedsState.posts]
+      })
+      .catch((error) => {
+        watchedFormState.processState.status = 'failed'
+        watchedFormState.processState.processErrors = error.message
+      })
   })
 }
 
