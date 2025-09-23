@@ -14,7 +14,7 @@ yup.setLocale({
   },
 })
 
-const createRssSchema = existingUrls => yup.string().url().required().notOneOf(existingUrls)
+const createRssSchema = existingUrls => yup.string().url().required().notOneOf(existingUrls).strict()
 
 const downloadRssFeed = (url, i18n) => axios
   .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
@@ -40,7 +40,7 @@ const app = (i18n) => {
     },
     processState: {
       status: 'filling', // 'sending', 'failed', 'success'
-      processErrors: '',
+      processErrors: {},
     },
     feedsData: {
       posts: [], // { id, linc, title, description, feedId }
@@ -85,13 +85,7 @@ const app = (i18n) => {
     const schema = createRssSchema(existingUrls)
     const validateForm = schema.validate(inputValue)
 
-    validateForm.catch((error) => {
-      watchedFormState.formState.isValid = false
-      const errorMessage = i18n.t(error.message)
-      console.log('error message = ', errorMessage)
-      watchedFormState.formState.errors = { message: errorMessage }
-      console.log('state = ', watchedFormState)
-    })
+    validateForm
       .then(() => {
         watchedFormState.formState.isValid = true
         watchedFormState.formState.errors = {}
@@ -101,21 +95,25 @@ const app = (i18n) => {
         // Далее проверка валидации самого сайта что это rss url
       })
       .then((data) => {
-        console.log('Полученные данные:', data)
-        if (watchedFeedsState.urls.includes(inputValue)) {
-          throw new Error('Error: url was added')
-        }
-        else {
-          watchedFormState.processState.status = 'success'
-          watchedFeedsState.urls.unshift(inputValue)
-          watchedFeedsState.feeds.unshift(data.feed)
-          watchedFeedsState.posts = [data.post, ...watchedFeedsState.posts]
-          watchedFormState.processState.processErrors = ''
-        }
+        watchedFormState.processState.status = 'success'
+        watchedFeedsState.urls.unshift(inputValue)
+        watchedFeedsState.feeds.unshift(data.feed)
+        watchedFeedsState.posts = [data.post, ...watchedFeedsState.posts]
+        watchedFormState.processState.processErrors = {}
       })
       .catch((error) => {
-        watchedFormState.processState.status = 'failed'
-        watchedFormState.processState.processErrors = error.message
+        if (error instanceof yup.ValidationError) {
+          watchedFormState.formState.isValid = false
+          const errorMessage = i18n.t(error.message)
+          console.log('error message = ', errorMessage)
+          watchedFormState.formState.errors = { message: errorMessage }
+          console.log('state = ', watchedFormState)
+        }
+        else {
+          watchedFormState.processState.status = 'failed'
+          watchedFormState.processState.processErrors = { message: error.message }
+          console.log('processState.processErrors = ', watchedFormState.processState.processErrors)
+        }
       })
   })
 }
