@@ -55,7 +55,7 @@ const createFormWatcher = (state, i18n, elements) => {
       case 'formState.isValid':
         handleIsValid(value, elements, formState.errors)
         break
-      case ' processState.processErrors': {
+      case 'processState.processErrors': {
         const status = value.length > 0 ? 'failed' : 'success'
         handleProcess(status, value, elements, i18n)
         break
