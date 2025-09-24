@@ -110,6 +110,10 @@ const app = (i18n) => {
           console.log('state form = ', watchedFormState)
         }
         else {
+          if (error === 'rss_form.error_messages.not_rss') {
+            watchedFormState.formState.isValid = false
+            watchedFormState.formState.errors = { message: '' }
+          }
           watchedFormState.processState.status = 'failed'
           console.log('ошибка сети до перевода - ', error.message)
           const message = i18n.t(error.message)
