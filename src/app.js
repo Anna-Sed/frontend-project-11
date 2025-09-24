@@ -110,14 +110,14 @@ const app = (i18n) => {
           console.log('state form = ', watchedFormState)
         }
         else {
-          console.log('ошибка сети до перевода - ', error.message)
-          const message = i18n.t(error.message)
-          console.log('ошибка сети после перевода - ', message)
-          if (message === 'Ресурс не содержит валидный RSS') {
+          if (error === 'rss_form.error_messages.not_rss') {
             watchedFormState.formState.isValid = false
             watchedFormState.formState.errors = { message: '' }
           }
           watchedFormState.processState.status = 'failed'
+          console.log('ошибка сети до перевода - ', error.message)
+          const message = i18n.t(error.message)
+          console.log('ошибка сети после перевода - ', message)
           watchedFormState.processState.processErrors = { message }
           console.log('processState.processErrors = ', watchedFormState.processState.processErrors)
           console.log('state feed = ', watchedFeedsState)
