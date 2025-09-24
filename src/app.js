@@ -118,7 +118,7 @@ const app = (i18n) => {
           console.log('ошибка сети до перевода - ', error.message)
           const message = i18n.t(error.message)
           console.log('ошибка сети после перевода - ', message)
-          watchedFeedsState.processState.processErrors = { message }
+          watchedFormState.processState.processErrors = { message }
           console.log('processState.processErrors = ', watchedFormState.processState.processErrors)
           console.log('state feed = ', watchedFeedsState)
         }
