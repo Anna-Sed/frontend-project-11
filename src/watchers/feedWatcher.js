@@ -82,6 +82,7 @@ const createFeedsWatcher = (feedsData, uiState, elements, i18n) => {
         renderFeeds(value, feedsRoot)
         break
       case 'urls':
+        console.log('Изменились URL:', value)
         break
       default:
         throw new Error(`Unexpected path in feedWatcher: ${path}`)

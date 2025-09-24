@@ -27,7 +27,7 @@ const downloadRssFeed = url => axios
       case 'ERR_NETWORK':
         throw new Error('rss_form.error_messages.network_error')
       default:
-        throw new Error('rss_form.error_messages.not_contain_valid_rss')
+        throw new Error('rss_form.error_messages.not_rss')
     }
   })
 
