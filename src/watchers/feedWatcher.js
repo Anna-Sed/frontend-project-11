@@ -32,14 +32,14 @@ const renderFeeds = (feeds, feedsRoot) => {
 }
 
 const createPostItem = (post, seenPost, i18n) => {
-  const { id, link, title, description } = post 
+  const { id, link, title, description } = post
   const a = document.createElement('a')
   const postClass = seenPost.includes(id) ? ['fn-normal', 'link-secondary'] : ['fw-bold']
   a.classList.add(...postClass)
   a.setAttribute('data-id', id)
   a.setAttribute('target', '_blank')
   a.textContent = title
-  a.href = linc
+  a.href = link
   a.addEventListener('click', () => seenPost.push(id))
 
   const button = document.createElement('button')
@@ -49,9 +49,9 @@ const createPostItem = (post, seenPost, i18n) => {
   button.setAttribute('data-bs-toggle', 'modal')
   button.setAttribute('data-bs-target', '#modal')
   button.textContent = i18n.t('post_button')
-  button.dataset.bsTitle = title;
-  button.dataset.bsDescription = description;
-  button.dataset.bsLink = link;
+  button.dataset.bsTitle = title
+  button.dataset.bsDescription = description
+  button.dataset.bsLink = link
 
   const li = document.createElement('li')
   li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0')
