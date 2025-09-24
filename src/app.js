@@ -16,22 +16,19 @@ yup.setLocale({
 
 const createRssSchema = existingUrls => yup.string().url().required().notOneOf(existingUrls).strict()
 
-const downloadRssFeed = (url, i18n) => axios
+const downloadRssFeed = url => axios
   .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
   .then((response) => {
     console.log('Полный ответ:', JSON.stringify(response.data, null, 2))
-    try {
-      return parseRss(response.data.contents)
-    } catch (parseError) {
-      throw new Error('rss_form.error_messages.not_rss')
-    }
+    return parseRss(response.data.contents)
   })
-  .catch((error) => {
-    console.log('полная структура ошибки в загрузке ссылки = ', error)
-    if (error.response && error.response.status) {
-      throw new Error('rss_form.error_messages.network_error')
+  .catch ((error) => {
+    switch (error.code) {
+      case 'ERR_NETWORK':
+        throw new Error('rss_form.error_messages.network_error')
+      default:
+        throw new Error('rss_form.error_messages.not_contain_valid_rss')
     }
-    throw new Error('rss_form.error_messages.not_rss')
   })
 
 const app = (i18n) => {
@@ -94,7 +91,7 @@ const app = (i18n) => {
         watchedFormState.formState.errors = {}
         watchedFormState.processState.processErrors = {}
         watchedFormState.processState.status = 'sending'
-        return downloadRssFeed(inputValue, i18n) // отправляем запрос на сервер.
+        return downloadRssFeed(inputValue) // отправляем запрос на сервер.
 
         // Далее проверка валидации самого сайта что это rss url
       })

@@ -49,9 +49,9 @@ const createPostItem = (post, seenPost, i18n) => {
   button.setAttribute('data-bs-toggle', 'modal')
   button.setAttribute('data-bs-target', '#modal')
   button.textContent = i18n.t('post_button')
-  // button.dataset.bsTitle = title;
-  // button.dataset.bsDescription = description;
-  // button.dataset.bsLink = link;
+  button.dataset.bsTitle = title;
+  button.dataset.bsDescription = description;
+  button.dataset.bsLink = link;
 
   const li = document.createElement('li')
   li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0')
@@ -81,8 +81,10 @@ const createFeedsWatcher = (feedsData, uiState, elements, i18n) => {
       case 'feeds':
         renderFeeds(value, feedsRoot)
         break
+      case 'urls':
+        break
       default:
-        throw new Error(`Unexpected path: ${path}`)
+        throw new Error(`Unexpected path in feedWatcher: ${path}`)
     }
   })
 }

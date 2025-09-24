@@ -64,7 +64,7 @@ const createFormWatcher = (state, i18n, elements) => {
         handleProcess(value, processState.processErrors, elements, i18n)
         break
       default:
-        throw new Error(`Unexpected path: ${path}`)
+        throw new Error(`Unexpected path in formWatcher: ${path}`)
     }
   })
 }
