@@ -32,7 +32,7 @@ const renderFeeds = (feeds, feedsRoot) => {
 }
 
 const createPostItem = (post, seenPost, i18n) => {
-  const { id, linc, title, description } = post 
+  const { id, link, title, description } = post 
   const a = document.createElement('a')
   const postClass = seenPost.includes(id) ? ['fn-normal', 'link-secondary'] : ['fw-bold']
   a.classList.add(...postClass)
