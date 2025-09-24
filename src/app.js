@@ -20,16 +20,18 @@ const downloadRssFeed = (url, i18n) => axios
   .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
   .then((response) => {
     console.log('Полный ответ:', JSON.stringify(response.data, null, 2))
-    return parseRss(response.data.contents) // отправляем данные на парсинг
+    try {
+      return parseRss(response.data.contents)
+    } catch (parseError) {
+      throw new Error('rss_form.error_messages.not_rss')
+    }
   })
   .catch((error) => {
     console.log('полная структура ошибки в загрузке ссылки = ', error)
-    switch (error.code) {
-      case 'ERR_NETWORK':
-        throw new Error(i18n.t('rss_form.error_messages.network_error'))
-      default:
-        throw new Error(i18n.t('rss_form.error_messages.not_rss'))
+    if (error.response && error.response.status) {
+      throw new Error('rss_form.error_messages.network_error')
     }
+    throw new Error('rss_form.error_messages.not_rss')
   })
 
 const app = (i18n) => {
