@@ -95,10 +95,11 @@ const app = (i18n) => {
       })
       .then((data) => {
         watchedFormState.processState.status = 'success'
-        watchedFeedsState.urls = [inputValue, ...watchedFeedsState.urls]
         watchedFeedsState.feeds = [data.feed, ...watchedFeedsState.feeds]
         watchedFeedsState.posts = [...data.posts, ...watchedFeedsState.posts]
         console.log('стейт после получения данных с сервера = ', watchedFeedsState)
+        console.log('url = ', data.posts.linl)
+        watchedFeedsState.urls = [data.posts.linl, ...watchedFeedsState.urls]
       })
       .catch((error) => {
         if (error instanceof yup.ValidationError) {
@@ -106,7 +107,7 @@ const app = (i18n) => {
           const errorMessage = i18n.t(error.message)
           console.log('error message = ', errorMessage)
           watchedFormState.formState.errors = { message: errorMessage }
-          console.log('state = ', watchedFormState)
+          console.log('state form = ', watchedFormState)
         }
         else {
           watchedFormState.processState.status = 'failed'
@@ -115,6 +116,7 @@ const app = (i18n) => {
           console.log('ошибка сети после перевода - ', message)
           watchedFormState.processState.processErrors = { message }
           console.log('processState.processErrors = ', watchedFormState.processState.processErrors)
+          console.log('state feed = ', watchedFeedsState)
         }
       })
   })
