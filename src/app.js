@@ -98,8 +98,8 @@ const app = (i18n) => {
         watchedFeedsState.feeds = [data.feed, ...watchedFeedsState.feeds]
         watchedFeedsState.posts = [...data.posts, ...watchedFeedsState.posts]
         console.log('стейт после получения данных с сервера = ', watchedFeedsState)
-        console.log('url = ', data.posts.linl)
-        watchedFeedsState.urls = [data.posts.linl, ...watchedFeedsState.urls]
+        console.log('url = ', inputValue)
+        watchedFeedsState.urls = [inputValue, ...watchedFeedsState.urls]
       })
       .catch((error) => {
         if (error instanceof yup.ValidationError) {

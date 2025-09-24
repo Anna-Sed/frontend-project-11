@@ -74,6 +74,7 @@ const renderPost = (posts, seenPost, postsRoot, i18n) => {
 const createFeedsWatcher = (feedsData, uiState, elements, i18n) => {
   const { postsRoot, feedsRoot } = elements
   return onChange(feedsData, (value, path) => {
+    console.log('путь  = ', path, `и значение = ${value}`)
     switch (path) {
       case 'posts':
         renderPost(value, uiState.seenPost, postsRoot, i18n)
