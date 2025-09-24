@@ -95,8 +95,8 @@ const app = (i18n) => {
       })
       .then((data) => {
         watchedFormState.processState.status = 'success'
-        watchedFeedsState.urls.unshift(inputValue)
-        watchedFeedsState.feeds.unshift(data.feed)
+        watchedFeedsState.urls = [inputValue, ...watchedFeedsState.urls]
+        watchedFeedsState.feeds = [data.feed, ...watchedFeedsState.feeds]
         watchedFeedsState.posts = [...data.posts, ...watchedFeedsState.posts]
         console.log('стейт после получения данных с сервера = ', watchedFeedsState)
       })
