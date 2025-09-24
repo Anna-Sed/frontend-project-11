@@ -19,6 +19,7 @@ export default (xmlContent) => {
     return {
       id: _.uniqueId(),
       title: item.querySelector('title').textContent,
+      link: item.querySelector('link').textContent,
       description: item.querySelector('description').textContent,
       feedId,
     }

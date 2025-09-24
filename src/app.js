@@ -43,7 +43,7 @@ const app = (i18n) => {
       processErrors: {},
     },
     feedsData: {
-      posts: [], // { id, linc, title, description, feedId }
+      posts: [], // { id, link, title, description, feedId }
       urls: [],
       feeds: [], // { id, title, discription }
     },
@@ -92,8 +92,6 @@ const app = (i18n) => {
         watchedFormState.processState.processErrors = {}
         watchedFormState.processState.status = 'sending'
         return downloadRssFeed(inputValue) // отправляем запрос на сервер.
-
-        // Далее проверка валидации самого сайта что это rss url
       })
       .then((data) => {
         watchedFormState.processState.status = 'success'
