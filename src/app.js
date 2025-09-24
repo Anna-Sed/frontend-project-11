@@ -23,6 +23,7 @@ const downloadRssFeed = (url, i18n) => axios
     return parseRss(response.data.contents) // отправляем данные на парсинг
   })
   .catch((error) => {
+    console.log('полная структура ошибки в загрузке ссылки = ', error)
     switch (error.code) {
       case 'ERR_NETWORK':
         throw new Error(i18n.t('rss_form.error_messages.network_error'))
@@ -89,6 +90,7 @@ const app = (i18n) => {
       .then(() => {
         watchedFormState.formState.isValid = true
         watchedFormState.formState.errors = {}
+        watchedFormState.processState.processErrors = {}
         watchedFormState.processState.status = 'sending'
         return downloadRssFeed(inputValue, i18n) // отправляем запрос на сервер.
 
@@ -98,8 +100,8 @@ const app = (i18n) => {
         watchedFormState.processState.status = 'success'
         watchedFeedsState.urls.unshift(inputValue)
         watchedFeedsState.feeds.unshift(data.feed)
-        watchedFeedsState.posts = [data.post, ...watchedFeedsState.posts]
-        watchedFormState.processState.processErrors = {}
+        watchedFeedsState.posts = [...data.posts, ...watchedFeedsState.posts]
+        console.log('стейт после получения данных с сервера = ', watchedFeedsState)
       })
       .catch((error) => {
         if (error instanceof yup.ValidationError) {
@@ -111,7 +113,9 @@ const app = (i18n) => {
         }
         else {
           watchedFormState.processState.status = 'failed'
+          console.log('ошибка сети до перевода - ', error.message)
           const message = i18n.t(error.message)
+          console.log('ошибка сети после перевода - ', message)
           watchedFormState.processState.processErrors = { message }
           console.log('processState.processErrors = ', watchedFormState.processState.processErrors)
         }
