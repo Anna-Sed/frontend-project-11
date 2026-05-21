@@ -60,31 +60,24 @@ const app = (i18n) => {
     },
   }
 
-  const submitBtn = document.querySelector('[aria-label="add"]')
-  const rssInput = document.querySelector('#url-input')
-  const feedbackField = document.querySelector('.feedback')
-  const form = document.querySelector('.rss-form')
-  const postsRoot = document.querySelector('.posts')
-  const feedsRoot = document.querySelector('.feeds')
-
-  if (!feedsRoot || !postsRoot) {
-    console.error('Не найдены элементы для рендеринга')
-    return
+  const elements = {
+    submitBtn: document.querySelector('[aria-label="add"]'),
+    rssInput: document.querySelector('#url-input'),
+    feedbackField: document.querySelector('.feedback'),
+    form: document.querySelector('.rss-form'),
+    postsRoot: document.querySelector('.posts'),
+    feedsRoot: document.querySelector('.feeds'),
   }
 
-  const elements = {
-    submitBtn,
-    rssInput,
-    feedbackField,
-    form,
-    postsRoot,
-    feedsRoot,
+  if (!elements.feedsRoot || !elements.postsRoot) {
+    console.error('Не найдены элементы для рендеринга')
+    return
   }
 
   const watchedFormState = createFormWatcher(state, i18n, elements)
   const watchedFeedsState = createFeedsWatcher(state.feedsData, state.uiState, elements, i18n)
 
-  form.addEventListener('submit', (e) => {
+  elements.form.addEventListener('submit', (e) => {
     e.preventDefault()
     const formData = new FormData(e.target)
     const inputValue = formData.get('url')
