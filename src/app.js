@@ -16,8 +16,16 @@ yup.setLocale({
 
 const createRssSchema = existingUrls => yup.string().url().required().notOneOf(existingUrls).strict()
 
+const addProxy = (url) => {
+  const proxy = 'https://allorigins.hexlet.app/get'
+  const urlWithProxy = new URL(proxy)
+  urlWithProxy.searchParams.append('disableCache', 'true')
+  urlWithProxy.searchParams.append('url', url)
+  return urlWithProxy
+}
+
 const downloadRssFeed = url => axios
-  .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
+  .get(addProxy(url))
   .then((response) => {
     console.log('Полный ответ:', JSON.stringify(response.data, null, 2))
     return parseRss(response.data.contents)
@@ -44,7 +52,7 @@ const app = (i18n) => {
     },
     feedsData: {
       posts: [], // { id, link, title, description, feedId }
-      urls: [],
+      urls: [], // Все загруженные ссылки rss
       feeds: [], // { id, title, discription }
     },
     uiState: {
