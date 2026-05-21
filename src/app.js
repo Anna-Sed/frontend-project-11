@@ -83,9 +83,8 @@ const app = (i18n) => {
 
     const existingUrls = watchedFeedsState.urls
     const schema = createRssSchema(existingUrls)
-    const validateForm = schema.validate(inputValue)
-
-    validateForm
+    schema
+      .validate(inputValue)
       .then(() => {
         watchedFormState.formState.isValid = true
         watchedFormState.formState.errors = {}
