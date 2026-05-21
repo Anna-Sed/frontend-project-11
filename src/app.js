@@ -44,7 +44,6 @@ const app = (i18n) => {
     formState: {
       isValid: null,
       errors: {}, // { message }
-      // inputValue: '',
     },
     processState: {
       status: 'filling', // 'sending', 'failed', 'success'
@@ -95,9 +94,10 @@ const app = (i18n) => {
         return downloadRssFeed(inputValue) // отправляем запрос на сервер.
       })
       .then((data) => {
+        const { feed, posts } = data
         watchedFormState.processState.status = 'success'
-        watchedFeedsState.feeds = [data.feed, ...watchedFeedsState.feeds]
-        watchedFeedsState.posts = [...data.posts, ...watchedFeedsState.posts]
+        watchedFeedsState.feeds = [feed, ...watchedFeedsState.feeds]
+        watchedFeedsState.posts = [...posts, ...watchedFeedsState.posts]
         console.log('стейт после получения данных с сервера = ', watchedFeedsState)
         console.log('url = ', inputValue)
         watchedFeedsState.urls = [inputValue, ...watchedFeedsState.urls]
