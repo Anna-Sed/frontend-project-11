@@ -68,13 +68,46 @@ const app = (i18n) => {
     feedsRoot: document.querySelector('.feeds'),
   }
 
+  const watchedFormState = createFormWatcher(state, i18n, elements)
+  const watchedFeedsState = createFeedsWatcher(state.feedsData, state.uiState, elements, i18n)
+
+  const interval = () => {
+    setTimeout(() => {
+      const allFeedLinks = state.feedsData.feeds.map(feed => feed.resource)
+      if (allFeedLinks.length === 0) interval()
+      else {
+        console.log('Все ссылки фидов в интервале', allFeedLinks)
+        const allPromisePosts = allFeedLinks
+          .map(link => downloadRssFeed(link)
+            .then(({ posts }) => posts))
+        console.log('allPromisePosts в интервале: ', allPromisePosts)
+        Promise.all(allPromisePosts)
+          .then((allPosts) => {
+            console.log('Все посты в интервале после загрузки аксиос: ', allPosts)
+            const newPosts = allPosts
+              .flat()
+              .filter((post) => {
+                const { posts } = state.feedsData
+                return !posts.find(el => el.link === post.link)
+              })
+            console.log('Новые посты в интервале: ', newPosts)
+            watchedFeedsState.posts = [...newPosts, ...state.feedsData.posts]
+            console.log('стейт с постами в интервале после добавления новых постов: ', state.feedsData.posts)
+          })
+          .catch((error) => {
+            console.error('Ошибка при загрузке RSS-фидов:', error)
+          })
+          .then(() => interval())
+      }
+    }, 5000)
+  }
+
+  interval()
+
   if (!elements.feedsRoot || !elements.postsRoot) {
     console.error('Не найдены элементы для рендеринга')
     return
   }
-
-  const watchedFormState = createFormWatcher(state, i18n, elements)
-  const watchedFeedsState = createFeedsWatcher(state.feedsData, state.uiState, elements, i18n)
 
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault()
