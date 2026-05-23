@@ -79,7 +79,7 @@ const app = (i18n) => {
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault()
     const formData = new FormData(e.target)
-    const inputValue = formData.get('url')
+    const inputValue = formData.get('url').trim()
 
     const existingUrls = watchedFeedsState.urls
     const schema = createRssSchema(existingUrls)
@@ -90,11 +90,12 @@ const app = (i18n) => {
         watchedFormState.formState.errors = {}
         watchedFormState.processState.processErrors = {}
         watchedFormState.processState.status = 'sending'
-        return downloadRssFeed(inputValue) // отправляем запрос на сервер.
+        return downloadRssFeed(inputValue) // отправляем запрос на сервер. zВозврат распарсенных данных
       })
       .then((data) => {
         const { feed, posts } = data
         watchedFormState.processState.status = 'success'
+        feed.resource = inputValue
         watchedFeedsState.feeds = [feed, ...watchedFeedsState.feeds]
         watchedFeedsState.posts = [...posts, ...watchedFeedsState.posts]
         console.log('стейт после получения данных с сервера = ', watchedFeedsState)
