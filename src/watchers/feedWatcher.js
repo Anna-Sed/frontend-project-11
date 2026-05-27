@@ -14,7 +14,7 @@ const createConteiner = (root, title) => {
 }
 
 const renderFeeds = (feeds, feedsRoot) => {
-  console.log('Рендерим фиды:', feeds)
+  // console.log('Рендерим фиды:', feeds)
   const conteiner = createConteiner(feedsRoot, 'Фиды')
   const ul = conteiner.querySelector('ul')
 
@@ -50,6 +50,7 @@ const createPostItem = (post, seenPost, i18n) => {
   button.setAttribute('data-bs-toggle', 'modal')
   button.setAttribute('data-bs-target', '#modal')
   button.textContent = i18n.t('post_button')
+  // Вопрос - зачем вот это??? |
   button.dataset.bsTitle = title
   button.dataset.bsDescription = description
   button.dataset.bsLink = link
@@ -61,7 +62,7 @@ const createPostItem = (post, seenPost, i18n) => {
 }
 
 const renderPost = (posts, seenPost, postsRoot, i18n) => {
-  console.log('Рендерим посты:', posts)
+  // console.log('Рендерим посты:', posts)
   if (posts.length === 0) {
     postsRoot.innerHtml = ''
     return
@@ -75,7 +76,7 @@ const renderPost = (posts, seenPost, postsRoot, i18n) => {
 const createFeedsWatcher = (feedsData, uiState, elements, i18n) => {
   const { postsRoot, feedsRoot } = elements
   return onChange(feedsData, (path, value) => {
-    console.log('путь  = ', path, `и значение = ${value}`)
+    // console.log('путь  = ', path, `и значение = ${value}`)
     switch (path) {
       case 'posts':
         renderPost(value, uiState.seenPost, postsRoot, i18n)
@@ -84,7 +85,7 @@ const createFeedsWatcher = (feedsData, uiState, elements, i18n) => {
         renderFeeds(value, feedsRoot)
         break
       case 'urls':
-        console.log('Изменились URL:', value)
+        // console.log('Изменились URL:', value)
         break
       default:
         throw new Error(`Unexpected path in feedWatcher: ${path}`)

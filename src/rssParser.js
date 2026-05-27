@@ -3,7 +3,7 @@ import _ from 'lodash'
 export default (xmlContent) => {
   const parser = new DOMParser()
   const doc = parser.parseFromString(xmlContent, 'text/xml')
-  console.log('content = ', xmlContent)
+  // console.log('content = ', xmlContent)
 
   const feedTitle = doc.querySelector('title').textContent
   const feedDescription = doc.querySelector('description').textContent
@@ -24,6 +24,6 @@ export default (xmlContent) => {
       feedId,
     }
   })
-  console.log('Возвращаемые данные:', { feed, posts })
+  // console.log('Возвращаемые данные:', { feed, posts })
   return { feed, posts }
 }
