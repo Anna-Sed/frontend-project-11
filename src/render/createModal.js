@@ -1,5 +1,5 @@
 export default (state, i18n, elements) => {
-  console.log('Рендер модального окна')
+  // console.log('Рендер модального окна')
   const { modalContainer } = elements
 
   const modalReadBtn = modalContainer.querySelector('.read_btn')
