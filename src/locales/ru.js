@@ -11,6 +11,8 @@ export default {
       success_message: 'RSS успешно загружен',
     },
     post_button: 'Просмотр',
+    feeds_title: 'Фиды',
+    posts_title: 'Посты',
     modal: {
       modal_btn_reed_post: 'Читать полностью',
       modal_btn_close: 'Закрыть',
