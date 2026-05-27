@@ -161,9 +161,9 @@ const app = (i18n) => {
     if (!event.target.dataset.id) return
 
     const postId = e.target.dataset.id
-    console.log('Нажатый пост: ', postId)
+    // console.log('Нажатый пост: ', postId)
     watchedFormState.uiState.modalId = postId
-    console.log('состояние модального айди: ', state.uiState.modalId)
+    // console.log('состояние модального айди: ', state.uiState.modalId)
 
     if (!state.uiState.seenPost.includes(postId)) {
       state.uiState.seenPost.push(postId)
