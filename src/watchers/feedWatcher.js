@@ -13,9 +13,10 @@ const createConteiner = (root, title) => {
   return card
 }
 
-const renderFeeds = (feeds, feedsRoot) => {
+const renderFeeds = (feeds, feedsRoot, i18n) => {
   // console.log('Рендерим фиды:', feeds)
-  const conteiner = createConteiner(feedsRoot, 'Фиды')
+  const feedsTitle = i18n.t('feeds_title')
+  const conteiner = createConteiner(feedsRoot, feedsTitle)
   const ul = conteiner.querySelector('ul')
 
   const liItems = feeds.map((feed) => {
@@ -67,7 +68,9 @@ const renderPost = (posts, seenPost, postsRoot, i18n) => {
     postsRoot.innerHtml = ''
     return
   }
-  const conteiner = createConteiner(postsRoot, 'Посты')
+
+  const postsTitle = i18n.t('posts_title')
+  const conteiner = createConteiner(postsRoot, postsTitle)
   const ul = conteiner.querySelector('ul')
   const liItems = posts.map(post => createPostItem(post, seenPost, i18n))
   ul.append(...liItems)
@@ -82,7 +85,7 @@ const createFeedsWatcher = (feedsData, uiState, elements, i18n) => {
         renderPost(value, uiState.seenPost, postsRoot, i18n)
         break
       case 'feeds':
-        renderFeeds(value, feedsRoot)
+        renderFeeds(value, feedsRoot, i18n)
         break
       case 'urls':
         // console.log('Изменились URL:', value)
