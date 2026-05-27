@@ -106,11 +106,6 @@ const app = (i18n) => {
 
   interval()
 
-  // if (!elements.feedsRoot || !elements.postsRoot) {
-  //   console.error('Не найдены элементы для рендеринга')
-  //   return
-  // }
-
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault()
     const formData = new FormData(e.target)
@@ -169,6 +164,7 @@ const app = (i18n) => {
     console.log('Нажатый пост: ', postId)
     watchedFormState.uiState.modalId = postId
     console.log('состояние модального айди: ', state.uiState.modalId)
+
     if (!state.uiState.seenPost.includes(postId)) {
       state.uiState.seenPost.push(postId)
     }

@@ -21,9 +21,4 @@ export default (state, i18n, elements) => {
   }
 
   modalReadBtn.addEventListener('click', handleClick)
-
-  // Удаление обработчика. Чтобы избежать утечек памяти, удаляйте обработчик при закрытии модального окна
-  // document.addEventListener('hidden.bs.modal', () => {
-  //   modalReadBtn.removeEventListener('click', handleClick)
-  // })
 }
