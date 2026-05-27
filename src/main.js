@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import app from './app.js'
 import i18next from 'i18next'
 import resources from './locales/index'
