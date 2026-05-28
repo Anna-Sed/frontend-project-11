@@ -110,16 +110,16 @@ const app = (i18n) => {
     e.preventDefault()
     const formData = new FormData(e.target)
     const inputValue = formData.get('url').trim()
-
-    const existingUrls = watchedFeedsState.urls
-    const schema = createRssSchema(existingUrls)
+    watchedFormState.processState.status = 'sending'
+    // Передаём в createRssSchema все наши урлы, которые уже добавлены
+    const schema = createRssSchema(state.feedsData.urls)
     schema
       .validate(inputValue)
       .then(() => {
         watchedFormState.formState.isValid = true
         watchedFormState.formState.errors = {}
         watchedFormState.processState.processErrors = {}
-        watchedFormState.processState.status = 'sending'
+
         return downloadRssFeed(inputValue) // отправляем запрос на сервер. zВозврат распарсенных данных
       })
       .then((data) => {
@@ -133,6 +133,7 @@ const app = (i18n) => {
         watchedFeedsState.urls = [inputValue, ...watchedFeedsState.urls]
       })
       .catch((error) => {
+        watchedFormState.processState.status = 'failed'
         if (error instanceof yup.ValidationError) {
           watchedFormState.formState.isValid = false
           const errorMessage = i18n.t(error.message)
@@ -141,7 +142,7 @@ const app = (i18n) => {
           // console.log('state form = ', watchedFormState)
         }
         else {
-          watchedFormState.processState.status = 'failed'
+          // watchedFormState.processState.status = 'failed'
           // console.log('ошибка сети до перевода - ', error.message)
           const message = i18n.t(error.message)
           // console.log('ошибка сети после перевода - ', message)
