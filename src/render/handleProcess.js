@@ -9,6 +9,7 @@ export default (processStatus, errors, elements, i18n) => {
     case 'failed':
       submitBtn.disabled = false
       rssInput.disabled = false
+      rssInput.classList.add('is-invalid')
       feedbackField.classList.add('text-danger')
       feedbackField.textContent = errors.message
       break
@@ -17,6 +18,7 @@ export default (processStatus, errors, elements, i18n) => {
       rssInput.disabled = false
       feedbackField.textContent = i18n.t('rss_form.success_message')
       feedbackField.classList.remove('text-danger')
+      rssInput.classList.remove('is-invalid')
       rssInput.focus()
       rssInput.value = ''
       break
