@@ -4,6 +4,10 @@ export default (xmlContent) => {
   const parser = new DOMParser()
   const doc = parser.parseFromString(xmlContent, 'text/xml')
   // console.log('content = ', xmlContent)
+  const parserError = doc.querySelector('parsererror')
+  if (parserError) {
+    throw new Error('Ресурс не содержит валидный RSS')
+  }
 
   const feedTitle = doc.querySelector('title').textContent
   const feedDescription = doc.querySelector('description').textContent
