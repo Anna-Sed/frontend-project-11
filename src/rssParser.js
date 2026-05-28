@@ -3,10 +3,11 @@ import _ from 'lodash'
 export default (xmlContent) => {
   const parser = new DOMParser()
   const doc = parser.parseFromString(xmlContent, 'text/xml')
-  // console.log('content = ', xmlContent)
   const parserError = doc.querySelector('parsererror')
   if (parserError) {
-    throw new Error('Ресурс не содержит валидный RSS')
+    const error = new Error()
+    error.name = 'ParseError'
+    throw error
   }
 
   const feedTitle = doc.querySelector('title').textContent
@@ -28,6 +29,5 @@ export default (xmlContent) => {
       feedId,
     }
   })
-  // console.log('Возвращаемые данные:', { feed, posts })
   return { feed, posts }
 }
