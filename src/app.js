@@ -37,7 +37,7 @@ const app = (i18n) => {
     feedsData: {
       posts: [], // { id, link, title, description, feedId }
       urls: [], // Все загруженные ссылки rss
-      feeds: [], // { id, title, discription }
+      feeds: [], // { id, title, discription, resource }
     },
     uiState: {
       seenPost: [], // id-ишки
@@ -106,10 +106,8 @@ const app = (i18n) => {
         console.log('urlWithProxy: ', urlWithProxy)
         return axios.get(urlWithProxy)
       })
-      .then((response) => {
-        const data = parseRss(response.data.contents)
-        const { feed, posts } = data
-
+      .then(response => parseRss(response.data.contents))
+      .then(({ feed, posts }) => {
         feed.resource = inputValue
         watchedFeedsState.feeds = [feed, ...watchedFeedsState.feeds]
         watchedFeedsState.posts = [...posts, ...watchedFeedsState.posts]
