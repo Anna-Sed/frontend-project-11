@@ -103,7 +103,6 @@ const app = (i18n) => {
         watchedFormState.processState.processErrors = {}
 
         const urlWithProxy = addProxy(inputValue)
-        console.log('urlWithProxy: ', urlWithProxy)
         return axios.get(urlWithProxy)
       })
       .then(response => parseRss(response.data.contents))
@@ -121,7 +120,6 @@ const app = (i18n) => {
             watchedFormState.processState.processErrors = {
               message: i18n.t('rss_form.error_messages.network_error'),
             }
-            elements.rssInput.value = inputValue // ??? костыли
             break
           case 'ValidationError':
             watchedFormState.formState.isValid = false
@@ -130,7 +128,6 @@ const app = (i18n) => {
           case 'ParseError':
             watchedFormState.formState.isValid = false
             watchedFormState.formState.errors = { message: i18n.t('rss_form.error_messages.not_rss') }
-            elements.rssInput.value = inputValue // ??? костыли
             break
           default:
             console.log(`Unknown error: ${error}`)
