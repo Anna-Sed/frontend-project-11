@@ -16,7 +16,7 @@ const createFormWatcher = (state, i18n, elements) => {
         handleIsValid(value, elements, formState.errors)
         break
       case 'processState.processErrors': {
-        const status = Object.keys(value).length > 0 ? 'failed' : 'success'
+        const status = state.processState.status
         handleProcess(status, value, elements, i18n)
         break
       }
@@ -24,7 +24,6 @@ const createFormWatcher = (state, i18n, elements) => {
         handleProcess(value, processState.processErrors, elements, i18n)
         break
       case 'uiState.modalId':
-        // console.log('Запуск рендера из вотчера формы')
         createModal(state, i18n, elements)
         break
       default:
